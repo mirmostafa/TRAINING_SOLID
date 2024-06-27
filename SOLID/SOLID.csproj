@@ -6,12 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="SRP\Sample.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="SRP\Sample.cs" />
-  </ItemGroup>
-
 </Project>

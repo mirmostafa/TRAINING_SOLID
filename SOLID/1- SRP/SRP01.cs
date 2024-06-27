@@ -5,8 +5,8 @@
         // کلاس ناقض SRP
         public class User
         {
-            public string Password { get; set; }
-            public string Username { get; set; }
+            public required string Password { get; set; }
+            public required string Username { get; set; }
 
             public void Save()
             {
