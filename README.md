@@ -80,8 +80,6 @@
 
 - [Visual Studio](https://visualstudio.microsoft.com/) (یا هر IDE مورد علاقه برای زبان C#)
 - [.NET SDK](https://dotnet.microsoft.com/download)
-- [ReSharper](https://www.jetbrains.com/resharper/) (اختیاری، اما برای تحلیل و بهبود کد توصیه می‌شود)
-- [SonarQube](https://www.sonarqube.org/) (اختیاری، برای تحلیل کیفیت کد)
 
 ## کد منبع
 
