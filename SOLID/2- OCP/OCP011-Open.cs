@@ -1,4 +1,4 @@
-﻿namespace SOLID.OCP
+﻿namespace SOLID.OCP01
 {
 	namespace Invalid
 	{
