@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SOLID.SRP
+namespace SOLID.SRP03
 {
     public enum ContractType
     {
@@ -86,7 +86,7 @@ namespace SOLID.SRP
                     }
                 });
 
-                // Why?
+                // Why bad idea?
                 static double calculateYearlySalaryBadIdea(Employee employee) => 1000;
                 static double calculateYearlySalary(double fullTimeSalary, double workedHours) => 1000;
                 static double calculateHourlySalary() => 1000;

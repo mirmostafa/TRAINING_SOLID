@@ -1,4 +1,4 @@
-﻿namespace SOLID.SRP
+﻿namespace SOLID.SRP01
 {
     namespace Invalid
     {

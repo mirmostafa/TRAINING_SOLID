@@ -1,44 +1,63 @@
-﻿namespace SOLID.LSP
+﻿namespace SOLID.LSP02
 {
-	namespace Invalid
-	{
-        // مثال کد بدون رعایت LSP
-        public class Bird
+    namespace Invalid
+    {
+        // کلاس ناقض LSP
+        public class Rectangle
         {
-            public virtual void Fly()
+            public virtual int Width { get; set; }
+            public virtual int Height { get; set; }
+        }
+
+        public class Square : Rectangle
+        {
+            public override int Width
             {
-                // پرواز کردن
+                set { base.Width = value; }
+            }
+            public override int Height
+            {
+                set { base.Height = value; }
             }
         }
 
-        public class Ostrich : Bird
-        {
-            public override void Fly()
-            {
-                throw new NotSupportedException("Ostriches can't fly!");
-            }
-        }
+        // به نظر شما، چرا ناقص است؟
+        // کلاس، برعکس ارث‌بری شده است.
     }
 
-	namespace Valid
-	{
-        // مثال کد با رعایت LSP
-        public abstract class Bird
+    namespace Valid
+    {
+        public class Square
         {
-            // کلاس پایه بدون متد Fly
+            public virtual int Width { get; set; }
         }
 
-        public class FlyingBird : Bird
+        public class Rectangle: Square
         {
-            public void Fly()
-            {
-                // پرواز کردن
-            }
+            public override int Width { get => base.Width; set => base.Width = value; }
+            public int Height { get; set; }
+        }        
+    }
+
+    namespace Valid_Upgraded
+    {
+        // اصلاح شده بر اساس LSP
+        public interface IShape
+        {
+            int Area();
         }
 
-        public class Ostrich : Bird
+        public class Rectangle : IShape
         {
-            // بدون متد Fly
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public int Area() => Width * Height;
+        }
+
+        public class Square : IShape
+        {
+            public int Side { get; set; }
+            public int Area() => Side * Side;
         }
     }
 }
