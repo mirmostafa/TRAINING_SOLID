@@ -13,10 +13,23 @@ namespace SOLID.DIP03
 
 		}
 
-        public interface IServiceCollection : ISet<IService>
+        public interface IServiceCollection
         {
-
-		}
+            IServiceCollection Add<TService, TImplementation>(Func<TImplementation> getImplementation)
+                where TImplementation : class;
+            
+            IServiceCollection Add<TImplementation>(Func<TImplementation> getImplementation)
+                where TImplementation : class;
+            
+            IServiceCollection Add<TService, TImplementation>()
+                where TImplementation : class, new();
+            IServiceCollection Add<TImplementation>()
+                where TImplementation : class, new();
+            IServiceCollection Add<TService>(Func<object> getImplementation);
+            
+            TService Get<TService>()
+                where TService : class;
+        }
 
         public interface IAccountingService : IService
         {
@@ -28,34 +41,33 @@ namespace SOLID.DIP03
 	{
         public class ServiceCollection : IServiceCollection
         {
-            private readonly HashSet<IService> _services = [];
+            private readonly Dictionary<Type, Func<object>> _services = [];
 
-            public int Count { get; }
-            public bool IsReadOnly { get; }
+            public IServiceCollection Add<TService, TImplementation>(Func<TImplementation> getImplementation)
+                where TImplementation : class => Add(typeof(TService), getImplementation);
 
-            public bool Add(IService item)
-                => _services.Add(item);
-            public void Clear() => throw new NotImplementedException();
-            public bool Contains(IService item) => throw new NotImplementedException();
-            public void CopyTo(IService[] array, int arrayIndex) => throw new NotImplementedException();
-            public void ExceptWith(IEnumerable<IService> other) => throw new NotImplementedException();
-            public IEnumerator<IService> GetEnumerator() => throw new NotImplementedException();
-            public void IntersectWith(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool IsProperSubsetOf(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool IsProperSupersetOf(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool IsSubsetOf(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool IsSupersetOf(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool Overlaps(IEnumerable<IService> other) => throw new NotImplementedException();
-            public bool Remove(IService item) => throw new NotImplementedException();
-            public bool SetEquals(IEnumerable<IService> other) => throw new NotImplementedException();
-            public void SymmetricExceptWith(IEnumerable<IService> other) => throw new NotImplementedException();
-            public void UnionWith(IEnumerable<IService> other) => throw new NotImplementedException();
-            void ICollection<IService>.Add(IService item) => throw new NotImplementedException();
-            IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
+            public IServiceCollection Add<TService, TImplementation>()
+                where TImplementation : class, new() => Add<TService, TImplementation>(() => new TImplementation());
+
+            public IServiceCollection Add<TImplementation>()
+                where TImplementation : class, new() => Add(typeof(TImplementation), () => new TImplementation());
+
+            public IServiceCollection Add<TImplementation>(Func<TImplementation> getImplementation)
+                where TImplementation : class => Add(typeof(TImplementation), getImplementation);
+
+            public IServiceCollection Add<TService>(Func<object> getImplementation)
+                => Add(typeof(TService), getImplementation);
+
+            private IServiceCollection Add<TImplementation>(Type service, Func<TImplementation> getImplementation)
+                where TImplementation: class
+            {
+                /* Add to _services */
+                return this;
+            }
 
             public TService Get<TService>()
-                where TService : class, IService
-                => (_services.Single(x => x is TService) as TService)!;
+                where TService : class
+                => (_services.Single(x => x.Key is TService).Value() as TService)!;            
         }
     }
 
@@ -65,7 +77,7 @@ namespace SOLID.DIP03
 		{
 			public static Domain.IServiceCollection AddApplication1Services(this Domain.IServiceCollection services)
 			{
-                services.Add(new AccountingService()); // Invalid. Just for learning
+                services.Add<IAccountingService>(() => new AccountingService());
                 return services;
 			}
         }
@@ -82,7 +94,7 @@ namespace SOLID.DIP03
         {
             public static Domain.IServiceCollection AddApplication2Services(this Domain.IServiceCollection services)
             {
-                services.Add(new AccountingService()); // Invalid. Just for learning
+                services.Add(()=>new AccountingService()); // Invalid. Just for learning
                 return services;
             }
         }
